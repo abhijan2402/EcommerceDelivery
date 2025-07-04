@@ -9,9 +9,11 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import Header from '../../Components/FeedHeader';
 import CustomButton from '../../Components/CustomButton';
+import {LanguageContext} from '../../localization/LanguageContext';
+import strings from '../../localization';
 
 const AccountDetails = () => {
   const [accounts, setAccounts] = useState([
@@ -43,6 +45,7 @@ const AccountDetails = () => {
   });
 
   const handleAddAccount = () => {
+    const {strings} = useContext(LanguageContext);
     if (
       form.accountHolder &&
       form.accountNumber &&
@@ -84,16 +87,16 @@ const AccountDetails = () => {
       </TouchableOpacity>
 
       <View style={styles.detailsContainer}>
-        <Text style={styles.label}>Account Holder</Text>
+        <Text style={styles.label}>{strings.account_holder_name}</Text>
         <Text style={styles.value}>{item.accountHolder}</Text>
 
-        <Text style={styles.label}>Account Number</Text>
+        <Text style={styles.label}>{strings.account_number}</Text>
         <Text style={styles.value}>{item.accountNumber}</Text>
 
         <Text style={styles.label}>IFSC Code</Text>
         <Text style={styles.value}>{item.ifscCode}</Text>
 
-        <Text style={styles.label}>Branch Name</Text>
+        <Text style={styles.label}>{strings.branch}</Text>
         <Text style={styles.value}>{item.branchName}</Text>
       </View>
     </View>
@@ -101,7 +104,7 @@ const AccountDetails = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header showBack title="Account Details" />
+      <Header showBack title={strings.account_details} />
       <View style={{padding: 16, flex: 1}}>
         <FlatList
           data={accounts}
@@ -117,7 +120,7 @@ const AccountDetails = () => {
         </TouchableOpacity> */}
         <CustomButton
           style={{marginBottom: 25}}
-          title={'Add Bank Account'}
+          title={strings.add_bank_account}
           onPress={() => setModalVisible(true)}
         />
       </View>
@@ -126,10 +129,10 @@ const AccountDetails = () => {
       <Modal visible={modalVisible} transparent animationType="slide">
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Add Bank Account</Text>
+            <Text style={styles.modalTitle}>{strings.add_bank_account}</Text>
 
             <TextInput
-              placeholder="Account Holder Name"
+              placeholder={strings.account_holder_name}
               style={styles.input}
               value={form.accountHolder}
               onChangeText={text =>
@@ -137,7 +140,7 @@ const AccountDetails = () => {
               }
             />
             <TextInput
-              placeholder="Account Number"
+              placeholder={strings.account_number}
               style={styles.input}
               value={form.accountNumber}
               onChangeText={text =>
@@ -154,7 +157,7 @@ const AccountDetails = () => {
               }
             />
             <TextInput
-              placeholder="Branch Name"
+              placeholder={strings.branch}
               style={styles.input}
               value={form.branchName}
               onChangeText={text =>
@@ -166,12 +169,12 @@ const AccountDetails = () => {
               <TouchableOpacity
                 style={styles.cancelButton}
                 onPress={() => setModalVisible(false)}>
-                <Text style={{color: '#333'}}>Cancel</Text>
+                <Text style={{color: '#333'}}>{strings.cancel}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.saveButton}
                 onPress={handleAddAccount}>
-                <Text style={{color: '#fff'}}>Save</Text>
+                <Text style={{color: '#fff'}}>{strings.save}</Text>
               </TouchableOpacity>
             </View>
           </View>

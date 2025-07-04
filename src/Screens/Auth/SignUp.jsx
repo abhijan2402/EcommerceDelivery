@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -15,11 +15,13 @@ import CustomButton from '../../Components/CustomButton';
 import LottieView from 'lottie-react-native';
 import Input from '../../Components/Input';
 import {postRequest} from '../../Backend/Api';
+import {LanguageContext} from '../../localization/LanguageContext';
 
 const {height} = Dimensions.get('window');
 const {width} = Dimensions.get('window');
 
 const SignUp = ({navigation}) => {
+  const {strings} = useContext(LanguageContext);
   const animationRef = useRef(null);
   const [email, setEmail] = useState(null);
   const [password, setpassword] = useState(null);
@@ -87,31 +89,31 @@ const SignUp = ({navigation}) => {
           <View style={{marginLeft: 25, marginBottom: 10}}>
             <Text
               style={{fontSize: 22, color: COLOR.royalBlue, fontWeight: '700'}}>
-              Create New Account
+              {strings.create_new_account}
             </Text>
           </View>
           <Input
-            label="Email"
-            placeholder="Enter your email"
+            label={strings.email}
+            placeholder={strings.enter_email}
             value={email}
             onChangeText={setEmail}
           />
           <Input
-            label="Password"
-            placeholder="Enter your password"
+            label={strings.password}
+            placeholder={strings.enter_password}
             value={password}
             onChangeText={setpassword}
           />
           <Input
-            label="Confirm Password"
-            placeholder="Enter your Confirm Password"
+            label={strings.confirm_password}
+            placeholder={strings.enter_confirm_password}
             value={confirmPassword}
             onChangeText={setconfirmPassword}
           />
 
           <CustomButton
             loading={loading}
-            title="Create"
+            title={strings.create}
             onPress={() => {
               navigation.navigate('CreateProfile');
               // registerUser(email, password, confirmPassword);
@@ -119,13 +121,13 @@ const SignUp = ({navigation}) => {
             style={{marginTop: 15}}
           />
           <Text style={styles.footerText}>
-            Already having an account?{' '}
+            {strings.already_have_account}{' '}
             <TouchableOpacity
               style={{marginTop: 7}}
               onPress={() => {
                 navigation.navigate('Login');
               }}>
-              <Text style={styles.linkText}>Login</Text>
+              <Text style={styles.linkText}>{strings.login}</Text>
             </TouchableOpacity>
           </Text>
         </View>

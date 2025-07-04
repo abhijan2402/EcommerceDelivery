@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -13,6 +13,7 @@ import {
 import Header from '../../../Components/FeedHeader';
 import CustomButton from '../../../Components/CustomButton';
 import {COLOR} from '../../../Constants/Colors';
+import { LanguageContext } from '../../../localization/LanguageContext';
 
 const starImages = {
   filled: 'https://cdn-icons-png.flaticon.com/512/1828/1828884.png',
@@ -23,6 +24,7 @@ const Feedback = () => {
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState('');
   const [scale] = useState(new Animated.Value(1));
+  const {strings} = useContext(LanguageContext);
 
   const animateStar = () => {
     Animated.sequence([
@@ -56,19 +58,21 @@ const Feedback = () => {
 
   return (
     <View style={styles.container}>
-      <Header title="Feedback" showBack />
+      <Header title={strings.feedback} showBack />
 
       <ScrollView contentContainerStyle={styles.content}>
         {/* Order Summary */}
         <View style={styles.orderCard}>
-          <Text style={styles.orderLabel}>Order ID</Text>
+          <Text style={styles.orderLabel}>{strings.order_id}</Text>
           <Text style={styles.orderValue}>#ORD123456</Text>
-          <Text style={[styles.orderLabel, {marginTop: 8}]}>Order Title</Text>
+          <Text style={[styles.orderLabel, {marginTop: 8}]}>
+            {strings.order_title}
+          </Text>
           <Text style={styles.orderValue}>Apple iPhone 14 Pro Max</Text>
         </View>
 
         {/* Star Rating */}
-        <Text style={styles.sectionTitle}>Rate Your Experience</Text>
+        <Text style={styles.sectionTitle}>{strings.rate_experience}</Text>
         <View style={styles.stars}>
           {[1, 2, 3, 4, 5].map(i => (
             <TouchableOpacity key={i} onPress={() => handleRating(i)}>
@@ -83,15 +87,15 @@ const Feedback = () => {
         </View>
 
         {/* Review Input */}
-        <Text style={styles.sectionTitle}>Write a Review</Text>
+        <Text style={styles.sectionTitle}>{strings.write_review}</Text>
         <TextInput
           style={styles.textInput}
-          placeholder="Share your experience..."
+          placeholder={strings.write_review}
           multiline
           value={review}
           onChangeText={setReview}
         />
-        <CustomButton title={'Submit Feedback'} onPress={handleSubmit} />
+        <CustomButton title={strings.submit_feedback} onPress={handleSubmit} />
         {/* Submit Button */}
         {/* <TouchableOpacity style={styles.button} onPress={handleSubmit}>
           <Text style={styles.buttonText}>Submit Feedback</Text>

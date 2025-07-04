@@ -3,17 +3,20 @@ import {NavigationContainer} from '@react-navigation/native';
 import MainNavigation from './src/navigators/MainNavigation';
 import {AuthProvider} from './src/Backend/AuthContent';
 import {SafeAreaView, StatusBar, StyleSheet} from 'react-native';
+import {LanguageProvider} from './src/localization/LanguageContext';
 
 const App = () => {
   return (
-    <AuthProvider>
-      <SafeAreaView style={styles.safeArea}>
-        <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
-        <NavigationContainer>
-          <MainNavigation />
-        </NavigationContainer>
-      </SafeAreaView>
-    </AuthProvider>
+    <LanguageProvider>
+      <AuthProvider>
+        <SafeAreaView style={styles.safeArea}>
+          <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
+          <NavigationContainer>
+            <MainNavigation />
+          </NavigationContainer>
+        </SafeAreaView>
+      </AuthProvider>
+    </LanguageProvider>
   );
 };
 

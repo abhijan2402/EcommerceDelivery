@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useContext, useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -11,29 +11,14 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {COLOR} from '../../Constants/Colors';
 import CustomButton from '../../Components/CustomButton';
+import {LanguageContext} from '../../localization/LanguageContext';
 
 const {width, height} = Dimensions.get('window');
-const slides = [
-  {
-    key: '1',
-    title: 'Welcome to FastDrop Partner!',
-    description:
-      'Join our delivery team and start earning by delivering food, groceries, and more to nearby customers.',
-    image:
-      'https://img.freepik.com/premium-vector/delivery-boy-scooter-doing-delivery-service-illustration_602666-23.jpg?semt=ais_items_boosted&w=740', // Delivery rider introduction
-  },
-  {
-    key: '2',
-    title: 'Get Orders Instantly',
-    description:
-      'Receive delivery requests in real-time and accept orders with a single tap.',
-    image:
-      'https://thumbs.dreamstime.com/b/portrait-thoughtful-young-delivery-indian-man-red-shirt-leaning-boxes-holding-mobile-phone-isolated-white-144540334.jpg', // Accepting order
-  },
-];
+
 
 const OnBoarding = () => {
   const navigation = useNavigation();
+  const {strings} = useContext(LanguageContext);
   const [currentIndex, setCurrentIndex] = useState(0);
   const flatListRef = useRef();
 
@@ -49,6 +34,24 @@ const OnBoarding = () => {
       navigation.navigate('Login');
     }
   };
+
+
+  const slides = [
+    {
+      key: '1',
+      title: `${strings.onboarding_1_title}`,
+      description: `${strings.onboarding_1_desc}`,
+      image:
+        'https://img.freepik.com/premium-vector/delivery-boy-scooter-doing-delivery-service-illustration_602666-23.jpg?semt=ais_items_boosted&w=740', // Delivery rider introduction
+    },
+    {
+      key: '2',
+      title: `${strings.onboarding_2_title}`,
+      description: `${strings.onboarding_2_desc}`,
+      image:
+        'https://thumbs.dreamstime.com/b/portrait-thoughtful-young-delivery-indian-man-red-shirt-leaning-boxes-holding-mobile-phone-isolated-white-144540334.jpg', // Accepting order
+    },
+  ];
 
   const renderItem = ({item}) => (
     <View style={styles.slide}>
@@ -85,7 +88,11 @@ const OnBoarding = () => {
           ))}
         </View>
         <CustomButton
-          title={currentIndex === slides.length - 1 ? 'Get Started' : 'Next'}
+          title={
+            currentIndex === slides.length - 1
+              ? `${strings.get_started}`
+              : `${strings.next}`
+          }
           onPress={handleNext}
           style={{marginBottom: 20}}
         />

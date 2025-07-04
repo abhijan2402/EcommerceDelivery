@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -15,8 +15,10 @@ import Input from '../../Components/Input';
 import CustomButton from '../../Components/CustomButton';
 import {COLOR} from '../../Constants/Colors';
 import Header from '../../Components/FeedHeader';
+import {LanguageContext} from '../../localization/LanguageContext';
 
 const CreateProfile = ({navigation}) => {
+  const {strings} = useContext(LanguageContext);
   const [shopName, setShopName] = useState('');
   const [shopAddress, setShopAddress] = useState('');
   const [gstNumber, setGstNumber] = useState('');
@@ -73,43 +75,43 @@ const CreateProfile = ({navigation}) => {
 
   return (
     <View style={styles.safeArea}>
-      <Header title={'Create Profile'} />
+      <Header title={strings.create_profile} />
       <ScrollView
         style={styles.container}
         contentContainerStyle={{paddingBottom: 30}}>
         <Input
-          label="Shop Name"
+          label={strings.shop_name}
           value={shopName}
           onChangeText={setShopName}
-          placeholder="Enter shop name"
+          placeholder={strings.placeholder_shop_name}
         />
         <Input
-          label="Shop Address"
+          label={strings.shop_address}
           value={shopAddress}
           onChangeText={setShopAddress}
-          placeholder="Enter shop address"
+          placeholder={strings.placeholder_shop_address}
         />
         <Input
-          label="GST Number"
+          label={strings.gst_number}
           value={gstNumber}
           onChangeText={setGstNumber}
-          placeholder="Enter GST number"
+          placeholder={strings.placeholder_gst_number}
         />
         <Input
-          label="PAN Number"
+          label={strings.pan_number}
           value={panNumber}
           onChangeText={setPanNumber}
-          placeholder="Enter PAN number"
+          placeholder={strings.placeholder_pan_number}
         />
         <Input
-          label="Owner Name"
+          label={strings.owner_name}
           value={ownerName}
           onChangeText={setOwnerName}
-          placeholder="Enter owner name"
+          placeholder={strings.placeholder_owner_name}
         />
 
         <View style={styles.uploadContainer}>
-          <Text style={styles.label}>Upload Shop Document *</Text>
+          <Text style={styles.label}>{strings.upload_shop_document} *</Text>
           {shopDocument ? (
             <Image
               source={{uri: shopDocument.uri}}
@@ -119,15 +121,15 @@ const CreateProfile = ({navigation}) => {
             <TouchableOpacity
               style={styles.uploadButton}
               onPress={() => selectImage(setShopDocument)}>
-              <Text style={styles.uploadText}>Select Shop Document</Text>
+              <Text style={styles.uploadText}>
+                {strings.select_shop_document}
+              </Text>
             </TouchableOpacity>
           )}
         </View>
 
         <View style={styles.uploadContainer}>
-          <Text style={styles.label}>
-            Upload Additional Document (Optional)
-          </Text>
+          <Text style={styles.label}>{strings.upload_additional_document}</Text>
           {extraDocument ? (
             <Image
               source={{uri: extraDocument.uri}}
@@ -137,13 +139,13 @@ const CreateProfile = ({navigation}) => {
             <TouchableOpacity
               style={styles.uploadButton}
               onPress={() => selectImage(setExtraDocument)}>
-              <Text style={styles.uploadText}>Select Document</Text>
+              <Text style={styles.uploadText}>{strings.select_document}</Text>
             </TouchableOpacity>
           )}
         </View>
 
         <CustomButton
-          title="Submit Profile"
+          title={strings.submit_profile}
           onPress={handleSubmit}
           loading={loading}
           style={{marginTop: 20, marginBottom: 30}}

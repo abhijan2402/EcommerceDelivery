@@ -1,39 +1,44 @@
 import {StyleSheet, Text, View, FlatList, Image} from 'react-native';
-import React from 'react';
+import React, {useContext} from 'react';
 import Header from '../../../Components/FeedHeader';
+import {LanguageContext} from '../../../localization/LanguageContext';
 
-const creditTransactions = [
-  {
-    id: '1',
-    title: 'Monthly Salary',
-    amount: 15000,
-    date: '01 June 2025',
-    icon: 'https://cdn-icons-png.flaticon.com/512/3135/3135755.png',
-  },
-  {
-    id: '2',
-    title: 'Incentive Bonus',
-    amount: 2500,
-    date: '28 May 2025',
-    icon: 'https://cdn-icons-png.flaticon.com/512/847/847969.png',
-  },
-  {
-    id: '3',
-    title: 'Delivery Rewards',
-    amount: 800,
-    date: '27 May 2025',
-    icon: 'https://cdn-icons-png.flaticon.com/512/3771/3771538.png',
-  },
-  {
-    id: '4',
-    title: 'Referral Bonus',
-    amount: 1000,
-    date: '20 May 2025',
-    icon: 'https://cdn-icons-png.flaticon.com/512/1055/1055646.png',
-  },
-];
+
 
 const Wallet = () => {
+  const {strings} = useContext(LanguageContext);
+
+  const creditTransactions = [
+    {
+      id: '1',
+      title: `${strings.total_balance}`,
+      amount: 15000,
+      date: '01 June 2025',
+      icon: 'https://cdn-icons-png.flaticon.com/512/3135/3135755.png',
+    },
+    {
+      id: '2',
+      title: `${strings.incentive_bonus}`,
+      amount: 2500,
+      date: '28 May 2025',
+      icon: 'https://cdn-icons-png.flaticon.com/512/847/847969.png',
+    },
+    {
+      id: '3',
+      title: `${strings.delivery_rewards}`,
+      amount: 800,
+      date: '27 May 2025',
+      icon: 'https://cdn-icons-png.flaticon.com/512/3771/3771538.png',
+    },
+    {
+      id: '4',
+      title: `${strings.referral_bonus}`,
+      amount: 1000,
+      date: '20 May 2025',
+      icon: 'https://cdn-icons-png.flaticon.com/512/1055/1055646.png',
+    },
+  ];
+
   const totalBalance = creditTransactions.reduce((sum, t) => sum + t.amount, 0);
 
   const renderTransaction = ({item}) => (
@@ -49,13 +54,13 @@ const Wallet = () => {
 
   return (
     <View style={styles.container}>
-      <Header title="Wallet" />
+      <Header title={strings.wallet} />
       <View style={styles.balanceCard}>
-        <Text style={styles.balanceLabel}>Total Balance</Text>
+        <Text style={styles.balanceLabel}>{strings.total_balance}</Text>
         <Text style={styles.balanceValue}>₹{totalBalance}</Text>
       </View>
 
-      <Text style={styles.sectionTitle}>Recent Credits</Text>
+      <Text style={styles.sectionTitle}>{strings.recent_credits}</Text>
       <FlatList
         data={creditTransactions}
         keyExtractor={item => item.id}

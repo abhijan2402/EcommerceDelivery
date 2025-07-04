@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,10 +8,28 @@ import {
   ScrollView,
   Switch,
   SafeAreaView,
+  Modal,
+  Pressable,
 } from 'react-native';
+import Header from '../../Components/FeedHeader';
+import {LanguageContext} from '../../localization/LanguageContext';
+
+const languages = [
+  {label: 'English', code: 'en'},
+  {label: 'हिन्दी', code: 'hi'},
+];
 
 const Home = ({navigation}) => {
   const [isOnline, setIsOnline] = React.useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const {language, changeLanguage, strings} = useContext(LanguageContext);
+
+  const handleLanguageSelect = code => {
+    setShowModal(false);
+    if (code !== language) {
+      changeLanguage(code);
+    }
+  };
 
   const toggleSwitch = () => setIsOnline(prev => !prev);
 
@@ -20,7 +38,7 @@ const Home = ({navigation}) => {
       <ScrollView style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.name}>Hello, Rahul</Text>
+          <Text style={styles.name}>{strings.hello}, Rahul</Text>
           <View style={styles.rightHeader}>
             <Switch value={isOnline} onValueChange={toggleSwitch} />
             <TouchableOpacity
@@ -35,26 +53,40 @@ const Home = ({navigation}) => {
                 style={styles.icon}
               />
             </TouchableOpacity>
+
+            {/* Language Selector */}
+            <TouchableOpacity
+              style={styles.languageIcon}
+              onPress={() => setShowModal(true)}>
+              <View style={styles.langWrapper}>
+                <Text style={styles.globe}>🌐</Text>
+                <Text style={styles.langText}>{language.toUpperCase()}</Text>
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
 
         {/* Upcoming Orders */}
-        <Text style={styles.sectionTitle}>Upcoming Orders</Text>
+        <Text style={styles.sectionTitle}>{strings.upcoming_orders}</Text>
         <View style={styles.orderCard}>
           {/* Customer Details */}
-          <Text style={styles.subTitle}>Customer Details</Text>
+          <Text style={styles.subTitle}>{strings.customer_details}</Text>
           <View style={styles.detailBlock}>
-            <Text style={styles.label}>Name: John Doe</Text>
-            <Text style={styles.label}>Phone: +123456789</Text>
-            <Text style={styles.label}>Address: 123 Main Street, City</Text>
+            <Text style={styles.label}>{strings.name}: John Doe</Text>
+            <Text style={styles.label}>{strings.phone}: +123456789</Text>
+            <Text style={styles.label}>
+              {strings.address}: 123 Main Street, City
+            </Text>
           </View>
 
           {/* Shop Details */}
-          <Text style={styles.subTitle}>Shop Details</Text>
+          <Text style={styles.subTitle}>{strings.shop_details}</Text>
           <View style={styles.detailBlock}>
-            <Text style={styles.label}>Shop: Super Grocery Mart</Text>
-            <Text style={styles.label}>Delivery Time: 04:00 PM</Text>
-            <Text style={styles.label}>Date: 5th June 2025</Text>
+            <Text style={styles.label}>
+              {strings.shop_name}: Super Grocery Mart
+            </Text>
+            <Text style={styles.label}>{strings.delivery_date}: 04:00 PM</Text>
+            <Text style={styles.label}>{strings.date}: 5th June 2025</Text>
           </View>
 
           {/* Buttons */}
@@ -66,7 +98,7 @@ const Home = ({navigation}) => {
                 }}
                 style={styles.btnIcon}
               />
-              <Text style={styles.btnText}>Start Job</Text>
+              <Text style={styles.btnText}>{strings.start_job}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.directionBtn}>
               <Image
@@ -75,19 +107,49 @@ const Home = ({navigation}) => {
                 }}
                 style={styles.btnIcon}
               />
-              <Text style={styles.btnText}>Directions</Text>
+              <Text style={styles.btnText}>{strings.direction}</Text>
             </TouchableOpacity>
           </View>
         </View>
 
         {/* Past Orders */}
-        <Text style={styles.sectionTitle}>Past Orders</Text>
+        <Text style={styles.sectionTitle}>{strings.past_orders}</Text>
         <View style={styles.orderCard}>
-          <Text style={styles.label}>Customer: Jane Smith</Text>
-          <Text style={styles.label}>Delivered: 2nd June 2025 - 3:30 PM</Text>
-          <Text style={styles.label}>Shop: FreshMart</Text>
+          <Text style={styles.label}>{strings.customer}: Jane Smith</Text>
+          <Text style={styles.label}>
+            {strings.delivered}: 2nd June 2025 - 3:30 PM
+          </Text>
+          <Text style={styles.label}>{strings.shop_name}: FreshMart</Text>
         </View>
       </ScrollView>
+
+      {/* Modal for Language Selection */}
+      <Modal
+        visible={showModal}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowModal(false)}>
+        <Pressable
+          style={styles.modalOverlay}
+          onPress={() => setShowModal(false)}>
+          <View style={styles.modalContainer}>
+            {languages.map(lang => (
+              <TouchableOpacity
+                key={lang.code}
+                style={styles.langOption}
+                onPress={() => handleLanguageSelect(lang.code)}>
+                <Text
+                  style={[
+                    styles.langModalText,
+                    language === lang.code && {fontWeight: '700'},
+                  ]}>
+                  {lang.label}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </Pressable>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -117,6 +179,7 @@ const styles = StyleSheet.create({
   rightHeader: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 6,
   },
   notification: {
     marginLeft: 10,
@@ -183,5 +246,53 @@ const styles = StyleSheet.create({
   btnIcon: {
     width: 20,
     height: 20,
+  },
+
+  // Language Slector and Modal
+  languageIcon: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    backgroundColor: '#E5E0D8',
+    borderRadius: 8,
+    gap: 4,
+  },
+  langIconImg: {
+    width: 20,
+    height: 20,
+  },
+  langWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 1,
+  },
+  globe: {
+    fontSize: 16,
+    marginRight: 5,
+  },
+  langText: {
+    fontSize: 14,
+    color: '#000',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    justifyContent: 'flex-end',
+  },
+  modalContainer: {
+    backgroundColor: '#fff',
+    padding: 16,
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+  },
+  langOption: {
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  langModalText: {
+    fontSize: 16,
+    color: '#333',
   },
 });

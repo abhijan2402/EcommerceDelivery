@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import Header from '../../Components/FeedHeader'; // Adjust path if needed
 import {COLOR} from '../../Constants/Colors';
+import {LanguageContext} from '../../localization/LanguageContext';
 
 const sampleOrders = {
   upcoming: [
@@ -92,7 +93,7 @@ const statusStyles = {
   },
 };
 
-const Tabs = ({activeTab, setActiveTab}) => {
+const Tabs = ({activeTab, setActiveTab, strings}) => {
   return (
     <View style={styles.tabContainer}>
       <TouchableOpacity
@@ -103,7 +104,7 @@ const Tabs = ({activeTab, setActiveTab}) => {
             styles.tabText,
             activeTab === 'upcoming' && styles.activeTabText,
           ]}>
-          Upcoming Orders
+          {strings.upcoming_orders}
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
@@ -114,7 +115,7 @@ const Tabs = ({activeTab, setActiveTab}) => {
             styles.tabText,
             activeTab === 'past' && styles.activeTabText,
           ]}>
-          Past Orders
+          {strings.past_orders}
         </Text>
       </TouchableOpacity>
     </View>
@@ -123,6 +124,7 @@ const Tabs = ({activeTab, setActiveTab}) => {
 
 const Order = ({navigation}) => {
   const [activeTab, setActiveTab] = useState('upcoming');
+  const {strings} = useContext(LanguageContext);
 
   const RenderOrderItem = ({items, onPress}) => {
     const statusStyle = statusStyles[item?.status] || statusStyles.Pending;
@@ -151,13 +153,17 @@ const Order = ({navigation}) => {
           <View style={styles.detailsContainer}>
             <Text style={styles.customerName}>{item.customerName}</Text>
             <Text style={styles.address}>{item.address}</Text>
-            <Text style={styles.price}>Price: {item.price}</Text>
-            <Text style={styles.paymentMode}>Payment: {item.paymentMode}</Text>
+            <Text style={styles.price}>
+              {strings.price}: {item.price}
+            </Text>
+            <Text style={styles.paymentMode}>
+              {strings.payment}: {item.paymentMode}
+            </Text>
             <Text style={styles.shippingDetails}>
-              Shipping: {item.shippingDetails}
+              {strings.shipping}: {item.shippingDetails}
             </Text>
             <Text style={styles.deliveryDate}>
-              Delivery: {item.deliveryDate}
+              {strings.delivery}: {item.deliveryDate}
             </Text>
             <Text style={styles.additionalInfo}>{item.additionalInfo}</Text>
           </View>
@@ -168,8 +174,12 @@ const Order = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Header title="Orders" />
-      <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Header title={strings.orders} />
+      <Tabs
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        strings={strings}
+      />
 
       <FlatList
         data={
@@ -186,7 +196,7 @@ const Order = ({navigation}) => {
         )}
         contentContainerStyle={{paddingBottom: 30}}
         ListEmptyComponent={
-          <Text style={styles.emptyText}>No orders found.</Text>
+          <Text style={styles.emptyText}>{strings.no_orders_found}</Text>
         }
       />
     </View>

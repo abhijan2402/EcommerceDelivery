@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {
   View,
   Text,
@@ -11,16 +11,18 @@ import {
 } from 'react-native';
 import {COLOR} from '../../Constants/Colors';
 import Header from '../../Components/FeedHeader';
+import {LanguageContext} from '../../localization/LanguageContext';
 
 const AccountPage = ({navigation}) => {
+  const {strings} = useContext(LanguageContext);
   const handleLogout = () => {
     Alert.alert(
-      'Logout',
-      'Are you sure you want to logout?',
+      `${strings.logout}`,
+      `${strings.logout_confirmation}`,
       [
-        {text: 'Cancel', style: 'cancel'},
+        {text: `${strings.cancel}`, style: 'cancel'},
         {
-          text: 'Logout',
+          text: `${strings.logout}`,
           style: 'destructive',
           onPress: () => {
             // Implement logout logic here
@@ -35,7 +37,7 @@ const AccountPage = ({navigation}) => {
   return (
     <>
       <StatusBar barStyle="dark-content" backgroundColor={COLOR.white} />
-      <Header title="Account" />
+      <Header title={strings.account} />
       <ScrollView contentContainerStyle={styles.container}>
         {/* Profile Info */}
         <View style={styles.profileContainer}>
@@ -50,7 +52,7 @@ const AccountPage = ({navigation}) => {
         {/* Menu Items */}
         <View style={styles.menuContainer}>
           <MenuItem
-            title="Edit Profile"
+            title={strings.edit_profile}
             onPress={() => navigation.navigate('EditProfile')}
             iconUri="https://cdn-icons-png.flaticon.com/128/1828/1828919.png"
           />
@@ -60,26 +62,26 @@ const AccountPage = ({navigation}) => {
             iconUri="https://cdn-icons-png.flaticon.com/128/2659/2659366.png"
           /> */}
           <MenuItem
-            title="Edit Account Details"
+            title={strings.edit_account_details}
             onPress={() => navigation.navigate('AccountDetails')}
             iconUri="https://cdn-icons-png.flaticon.com/128/1077/1077114.png"
           />
           <MenuItem
-            title="Terms & Conditions"
+            title={strings.terms_conditions}
             onPress={() =>
-              navigation.navigate('Cms', {title: 'Terms & Conditions'})
+              navigation.navigate('Cms', {title: `${strings.terms_conditions}`})
             }
             iconUri="https://cdn-icons-png.flaticon.com/128/2913/2913469.png"
           />
           <MenuItem
-            title="Privacy Policy"
+            title={strings.privacy_policy}
             onPress={() =>
-              navigation.navigate('Cms', {title: 'Privacy Policy'})
+              navigation.navigate('Cms', {title: `${strings.privacy_policy}`})
             }
             iconUri="https://cdn-icons-png.flaticon.com/128/833/833524.png"
           />
           <MenuItem
-            title="Log Out"
+            title={strings.logout}
             onPress={handleLogout}
             iconUri="https://cdn-icons-png.flaticon.com/128/1828/1828479.png"
             isLogout

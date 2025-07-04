@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext, useState} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Image, Text} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -13,19 +13,24 @@ import MainCart from '../Screens/Main/Cart/MainCart';
 import {COLOR} from '../Constants/Colors';
 import MyRequest from '../Screens/Main/MyRequest';
 import Wallet from '../Screens/Main/WalletPage/Wallet';
+import { LanguageContext } from '../localization/LanguageContext';
+
 
 const Tab = createBottomTabNavigator();
 
-const icons = {
-  Home: 'https://cdn-icons-png.flaticon.com/128/1946/1946488.png',
-  Orders: 'https://cdn-icons-png.flaticon.com/128/1250/1250680.png',
-  // Cart: 'https://cdn-icons-png.flaticon.com/128/833/833314.png',
-  Wallet: 'https://cdn-icons-png.flaticon.com/128/8157/8157942.png',
-  Profile: 'https://cdn-icons-png.flaticon.com/128/456/456283.png',
-};
+
 
 const BottomNavigation = () => {
   const insets = useSafeAreaInsets();
+    const { strings} = useContext(LanguageContext);
+
+    const icons = {
+      [strings.home]: 'https://cdn-icons-png.flaticon.com/128/1946/1946488.png',
+      [strings.orders]: 'https://cdn-icons-png.flaticon.com/128/1250/1250680.png',
+      // Cart: 'https://cdn-icons-png.flaticon.com/128/833/833314.png',
+      [strings.wallet]: 'https://cdn-icons-png.flaticon.com/128/8157/8157942.png',
+      [strings.profile]: 'https://cdn-icons-png.flaticon.com/128/456/456283.png',
+    };
 
   return (
     <Tab.Navigator
@@ -69,11 +74,11 @@ const BottomNavigation = () => {
           );
         },
       })}>
-      <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Orders" component={Order} />
+      <Tab.Screen name={strings.home} component={Home} />
+      <Tab.Screen name={strings.orders} component={Order} />
       {/* <Tab.Screen name="Cart" component={MainCart} /> */}
-      <Tab.Screen name="Wallet" component={Wallet} />
-      <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen name={strings.wallet} component={Wallet} />
+      <Tab.Screen name={strings.profile} component={Profile} />
     </Tab.Navigator>
   );
 };

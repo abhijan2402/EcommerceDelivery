@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {StyleSheet, Text, View, ScrollView, Image} from 'react-native';
 import Header from '../../../Components/FeedHeader';
 import CustomButton from '../../../Components/CustomButton';
+import {LanguageContext} from '../../../localization/LanguageContext';
 
 const OrderDetail = ({navigation}) => {
+  const {strings} = useContext(LanguageContext);
   const order = {
     productName: 'Wireless Headphones',
     price: 199.99,
@@ -36,7 +38,7 @@ const OrderDetail = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Header title="Order Detail" showBack />
+      <Header title={strings.order_details} showBack />
       <ScrollView contentContainerStyle={styles.content}>
         {/* Product Overview */}
         <View style={styles.card}>
@@ -61,43 +63,43 @@ const OrderDetail = ({navigation}) => {
 
         {/* Price & Payment */}
         <View style={styles.card}>
-          <Text style={styles.sectionTitle}>Price & Payment</Text>
+          <Text style={styles.sectionTitle}>{strings.price_payment}</Text>
           <View style={styles.detailRow}>
-            <Text style={styles.label}>Price:</Text>
+            <Text style={styles.label}>{strings.price}:</Text>
             <Text style={styles.value}>${order.price}</Text>
           </View>
           <View style={styles.detailRow}>
-            <Text style={styles.label}>Payment Type:</Text>
+            <Text style={styles.label}>{strings.payment_type}:</Text>
             <Text style={styles.value}>{order.paymentType}</Text>
           </View>
         </View>
 
         {/* Shipping Address */}
         <View style={styles.card}>
-          <Text style={styles.sectionTitle}>Shipping Address</Text>
+          <Text style={styles.sectionTitle}>{strings.shipping_address}</Text>
           <Text style={styles.value}>{order.shippingAddress}</Text>
         </View>
 
         {/* Seller Info */}
         <View style={styles.card}>
-          <Text style={styles.sectionTitle}>Seller Information</Text>
+          <Text style={styles.sectionTitle}>{strings.seller_info}</Text>
           <View style={styles.detailRow}>
-            <Text style={styles.label}>Shop Name:</Text>
+            <Text style={styles.label}>{strings.shop_name}:</Text>
             <Text style={styles.value}>{order.seller.shopName}</Text>
           </View>
           <View style={styles.detailRow}>
-            <Text style={styles.label}>Address:</Text>
+            <Text style={styles.label}>{strings.address}:</Text>
             <Text style={styles.value}>{order.seller.shopAddress}</Text>
           </View>
           <View style={styles.detailRow}>
-            <Text style={styles.label}>Ratings:</Text>
+            <Text style={styles.label}>{strings.ratings}:</Text>
             <Text style={styles.value}>⭐ {order.seller.shopRating}/5</Text>
           </View>
         </View>
       </ScrollView>
       {order.status === 'Delivered' && (
         <CustomButton
-          title="Give Feedback"
+          title={strings.give_feedback}
           onPress={() => {
             navigation.navigate('Feedback', {orderId: order.id}); // if needed
           }}

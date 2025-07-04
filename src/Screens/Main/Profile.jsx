@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -12,8 +12,10 @@ import CustomButton from '../../Components/CustomButton';
 import {windowHeight, windowWidth} from '../../Constants/Dimensions';
 import {COLOR} from '../../Constants/Colors';
 import Header from '../../Components/FeedHeader';
+import {LanguageContext} from '../../localization/LanguageContext';
 
 const Profile = ({navigation}) => {
+  const {strings} = useContext(LanguageContext);
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState('John Doe');
   const [username, setUsername] = useState('johndoe123');
@@ -33,7 +35,7 @@ const Profile = ({navigation}) => {
     <ScrollView contentContainerStyle={styles.container}>
       {/* Profile Image and Edit Icon */}
       <Header
-        title={'Edit Profile '}
+        title={strings.edit_profile}
         showBack
         onBackPress={() => {
           navigation.goBack();
@@ -62,15 +64,15 @@ const Profile = ({navigation}) => {
         <View style={styles.countContainer}>
           <View style={styles.countBox}>
             <Text style={styles.countValue}>24</Text>
-            <Text style={styles.countLabel}>Posts</Text>
+            <Text style={styles.countLabel}>{strings.posts}</Text>
           </View>
           <View style={styles.countBox}>
             <Text style={styles.countValue}>24</Text>
-            <Text style={styles.countLabel}>Posts</Text>
+            <Text style={styles.countLabel}>{strings.posts}</Text>
           </View>
           <View style={styles.countBox}>
             <Text style={styles.countValue}>8</Text>
-            <Text style={styles.countLabel}>Chats</Text>
+            <Text style={styles.countLabel}>{strings.chats}</Text>
           </View>
         </View>
       </View>
@@ -78,37 +80,37 @@ const Profile = ({navigation}) => {
       {/* Profile Fields */}
       <View style={styles.inputContainer}>
         <Input
-          label="Name"
-          placeholder="Enter your name"
+          label={strings.name}
+          placeholder={strings.enter_name}
           value={name}
           onChangeText={setName}
           editable={isEditing}
         />
         <Input
-          label="Username"
-          placeholder="Enter your username"
+          label={strings.username}
+          placeholder={strings.enter_username}
           value={username}
           onChangeText={setUsername}
           editable={isEditing}
         />
         <Input
-          label="Age"
-          placeholder="Enter your age"
+          label={strings.age}
+          placeholder={strings.enter_age}
           value={age}
           onChangeText={setAge}
           editable={isEditing}
           keyboardType="numeric"
         />
         <Input
-          label="Gender"
-          placeholder="Enter your gender"
+          label={strings.gender}
+          placeholder={strings.enter_gender}
           value={gender}
           onChangeText={setGender}
           editable={isEditing}
         />
         <Input
-          label="Bio"
-          placeholder="Enter your bio"
+          label={strings.bio}
+          placeholder={strings.enter_bio}
           value={bio}
           onChangeText={setBio}
           editable={isEditing}
@@ -119,7 +121,7 @@ const Profile = ({navigation}) => {
       {/* Update Button */}
       {isEditing && (
         <CustomButton
-          title="Update Profile"
+          title={strings.update_profile}
           onPress={handleUpdateProfile}
           style={{marginTop: 15}}
         />

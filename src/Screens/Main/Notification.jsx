@@ -1,46 +1,49 @@
 import {StyleSheet, Text, View, FlatList, Image} from 'react-native';
-import React from 'react';
+import React, {useContext} from 'react';
 import Header from '../../Components/FeedHeader';
-
-const notifications = [
-  {
-    id: '1',
-    title: 'New Delivery Assigned',
-    description: 'You have a new delivery from “Fresh Mart”.',
-    time: '2 mins ago',
-    icon: 'https://cdn-icons-png.flaticon.com/512/3595/3595455.png',
-  },
-  {
-    id: '2',
-    title: 'Delivery Completed',
-    description: 'Delivery to “John Doe” completed successfully.',
-    time: '1 hour ago',
-    icon: 'https://cdn-icons-png.flaticon.com/512/845/845646.png',
-  },
-  {
-    id: '3',
-    title: 'Weekly Bonus Credited',
-    description: '₹500 bonus added to your wallet.',
-    time: 'Today, 9:00 AM',
-    icon: 'https://cdn-icons-png.flaticon.com/512/1170/1170627.png',
-  },
-  {
-    id: '4',
-    title: 'App Update Available',
-    description: 'Update the app for latest features.',
-    time: 'Yesterday, 5:30 PM',
-    icon: 'https://cdn-icons-png.flaticon.com/512/1828/1828911.png',
-  },
-  {
-    id: '5',
-    title: 'Shift Reminder',
-    description: 'Your shift starts in 30 minutes.',
-    time: 'Yesterday, 3:00 PM',
-    icon: 'https://cdn-icons-png.flaticon.com/512/2921/2921222.png',
-  },
-];
+import {LanguageContext} from '../../localization/LanguageContext';
 
 const Notification = () => {
+  const {strings} = useContext(LanguageContext);
+
+  const notifications = [
+    {
+      id: '1',
+      title: strings.new_delivery_assigned,
+      description: `${strings.new_delivery_from} “Fresh Mart”.`,
+      time: '2 mins ago',
+      icon: 'https://cdn-icons-png.flaticon.com/512/3595/3595455.png',
+    },
+    {
+      id: '2',
+      title: strings.delivery_completed,
+      description: `${strings.delivery_to} “John Doe” ${strings.completed_successfully}`,
+      time: '1 hour ago',
+      icon: 'https://cdn-icons-png.flaticon.com/512/845/845646.png',
+    },
+    {
+      id: '3',
+      title: strings.weekly_bonus_credited,
+      description: '₹500 ' + strings.bonus_added,
+      time: 'Today, 9:00 AM',
+      icon: 'https://cdn-icons-png.flaticon.com/512/1170/1170627.png',
+    },
+    {
+      id: '4',
+      title: strings.app_update_available,
+      description: strings.update_app_text,
+      time: 'Yesterday, 5:30 PM',
+      icon: 'https://cdn-icons-png.flaticon.com/512/1828/1828911.png',
+    },
+    {
+      id: '5',
+      title: strings.shift_reminder,
+      description: `${strings.shift_starts_in} 30 ${strings.minutes}.`,
+      time: 'Yesterday, 3:00 PM',
+      icon: 'https://cdn-icons-png.flaticon.com/512/2921/2921222.png',
+    },
+  ];
+
   const renderItem = ({item}) => (
     <View style={styles.itemContainer}>
       {/* <Image source={{uri: item.icon}} style={styles.icon} /> */}
@@ -54,7 +57,7 @@ const Notification = () => {
 
   return (
     <View style={styles.container}>
-      <Header showBack title="Notification" />
+      <Header showBack title={strings.notification} />
       <FlatList
         data={notifications}
         keyExtractor={item => item.id}

@@ -16,11 +16,13 @@ import LottieView from 'lottie-react-native';
 import Input from '../../Components/Input';
 import {AuthContext} from '../../Backend/AuthContent';
 import {useApi} from '../../Backend/Api';
+import {LanguageContext} from '../../localization/LanguageContext';
 
 const {height} = Dimensions.get('window');
 const {width} = Dimensions.get('window');
 
 const Login = ({navigation}) => {
+  const {strings} = useContext(LanguageContext);
   const {postRequest} = useApi();
 
   const animationRef = useRef(null);
@@ -75,25 +77,25 @@ const Login = ({navigation}) => {
           <View style={{marginLeft: 25, marginBottom: 10}}>
             <Text
               style={{fontSize: 22, color: COLOR.royalBlue, fontWeight: '700'}}>
-              Sign In
+              {strings.sign_in}
             </Text>
           </View>
           <Input
-            label="Email"
-            placeholder="Enter your email"
+            label={strings.email}
+            placeholder={strings.enter_email}
             value={email}
             onChangeText={setEmail}
           />
           <Input
-            label="Password"
-            placeholder="Enter your password"
+            label={strings.password}
+            placeholder={strings.enter_password}
             value={password}
             onChangeText={setpassword}
           />
 
           <CustomButton
             loading={loading}
-            title="Login"
+            title={strings.login}
             onPress={() => {
               setToken('123');
               setUser('123');
@@ -103,13 +105,13 @@ const Login = ({navigation}) => {
             style={{marginTop: 15}}
           />
           <Text style={styles.footerText}>
-            Not having account?{' '}
+            {strings.not_have_account}{' '}
             <TouchableOpacity
               style={{marginTop: 8}}
               onPress={() => {
                 navigation.navigate('SignUp');
               }}>
-              <Text style={styles.linkText}>Create One</Text>
+              <Text style={styles.linkText}>{strings.create_one}</Text>
             </TouchableOpacity>
           </Text>
         </View>
