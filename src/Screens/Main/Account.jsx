@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {
   View,
   Text,
@@ -12,9 +12,18 @@ import {
 import {COLOR} from '../../Constants/Colors';
 import Header from '../../Components/FeedHeader';
 import {LanguageContext} from '../../localization/LanguageContext';
+import {AuthContext} from '../../Backend/AuthContent';
+import {useIsFocused} from '@react-navigation/native';
+import {PROFILE_IMAGEURL, useApi} from '../../Backend/Api';
 
 const AccountPage = ({navigation}) => {
+  const isFocused = useIsFocused();
+  const {setUser, setToken} = useContext(AuthContext);
+  const {getRequest} = useApi();
+
   const {strings} = useContext(LanguageContext);
+  const {user} = useContext(AuthContext);
+  const users = user?.user;
   const handleLogout = () => {
     Alert.alert(
       `${strings.logout}`,
@@ -26,6 +35,8 @@ const AccountPage = ({navigation}) => {
           style: 'destructive',
           onPress: () => {
             // Implement logout logic here
+            setUser(null);
+            setToken(null);
             Alert.alert('Logged out');
           },
         },
@@ -33,6 +44,29 @@ const AccountPage = ({navigation}) => {
       {cancelable: true},
     );
   };
+
+  const fetchProfile = async () => {
+    try {
+      const response = await getRequest(
+        `api/get-profile/${user?.user?.id}`,
+        true,
+      );
+      if (response?.success) {
+        const data = response?.data;
+        setUser(data);
+      } else {
+        Alert.alert('Error', response?.error || 'Failed to fetch profile');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Something went wrong while fetching profile');
+    }
+  };
+
+  useEffect(() => {
+    if (isFocused) {
+      fetchProfile();
+    }
+  }, [isFocused]);
 
   return (
     <>
@@ -42,11 +76,15 @@ const AccountPage = ({navigation}) => {
         {/* Profile Info */}
         <View style={styles.profileContainer}>
           <Image
-            source={{uri: 'https://randomuser.me/api/portraits/men/75.jpg'}}
+            source={{
+              uri: users?.image
+                ? `${PROFILE_IMAGEURL}${users?.image}`
+                : 'https://cdn-icons-png.flaticon.com/128/456/456212.png',
+            }}
             style={styles.profileImage}
           />
-          <Text style={styles.userName}>John Doe</Text>
-          <Text style={styles.userEmail}>john@gmail.com</Text>
+          <Text style={styles.userName}>{users?.full_name}</Text>
+          <Text style={styles.userEmail}>{users?.email}</Text>
         </View>
 
         {/* Menu Items */}

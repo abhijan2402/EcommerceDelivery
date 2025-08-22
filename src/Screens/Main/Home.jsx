@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -13,6 +13,8 @@ import {
 } from 'react-native';
 import Header from '../../Components/FeedHeader';
 import {LanguageContext} from '../../localization/LanguageContext';
+import {AuthContext} from '../../Backend/AuthContent';
+import {useIsFocused} from '@react-navigation/native';
 
 const languages = [
   {label: 'English', code: 'en'},
@@ -20,9 +22,12 @@ const languages = [
 ];
 
 const Home = ({navigation}) => {
+  const isFocus = useIsFocused();
+
   const [isOnline, setIsOnline] = React.useState(true);
   const [showModal, setShowModal] = useState(false);
   const {language, changeLanguage, strings} = useContext(LanguageContext);
+  const {user, setUser} = useContext(AuthContext);
 
   const handleLanguageSelect = code => {
     setShowModal(false);
@@ -33,6 +38,25 @@ const Home = ({navigation}) => {
 
   const toggleSwitch = () => setIsOnline(prev => !prev);
 
+  const fetchProfile = async () => {
+    try {
+      const response = await getRequest(
+        `api/get-profile/${user?.user?.id}`,
+        true,
+      );
+      if (response?.success) {
+        const data = response?.data;
+        setUser(data);
+      } else {
+        Alert.alert('Error', response?.error || 'Failed to fetch profile');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Something went wrong while fetching profile');
+    }
+  };
+  useEffect(() => {
+    fetchProfile();
+  }, [isFocus]);
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView style={styles.container}>

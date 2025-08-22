@@ -1,45 +1,71 @@
-import {StyleSheet, Text, View, ScrollView} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import {
+  StyleSheet,
+  View,
+  ScrollView,
+  ActivityIndicator,
+  useWindowDimensions,
+} from 'react-native';
 import {useRoute, useNavigation} from '@react-navigation/native';
 import Header from '../../Components/FeedHeader';
+import {useApi} from '../../Backend/Api';
+import RenderHTML from 'react-native-render-html';
 
 const Cms = () => {
   const route = useRoute();
   const navigation = useNavigation();
-  const {title} = route.params;
+  const {title, slug} = route.params;
+  const {getRequest} = useApi();
+  const {width} = useWindowDimensions();
+
+  const [htmlContent, setHtmlContent] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchCMSContent();
+  }, []);
+
+  const fetchCMSContent = async () => {
+    try {
+      const response = await getRequest(`api/delivery/cms-page/${slug}`);
+      if (response?.success && response?.data?.description) {
+        setHtmlContent(response.data.description);
+      } else {
+        setHtmlContent('<p>Content not found.</p>');
+      }
+    } catch (error) {
+      console.error('CMS Page Error:', error);
+      setHtmlContent('<p>An error occurred while fetching the content.</p>');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <View style={styles.container}>
-      {/* Header */}
-      <Header
-        title={title}
-        showBack
-        onBackPress={() => {
-          navigation.goBack();
-        }}
-      />
+      <Header title={title} showBack onBackPress={() => navigation.goBack()} />
 
-      {/* Content */}
       <ScrollView contentContainerStyle={styles.contentContainer}>
-        <Text style={styles.paragraph}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vehicula,
-          nibh eu facilisis pulvinar, nulla turpis fermentum purus, nec
-          convallis nunc orci sit amet mauris. In vel gravida libero. Duis
-          malesuada lacus non turpis facilisis, nec ultricies nibh viverra.
-        </Text>
-
-        <Text style={styles.paragraph}>
-          Morbi eget nisi a justo iaculis tincidunt. Nullam rutrum elit sed
-          lectus sagittis, a luctus lacus tincidunt. Pellentesque a rutrum
-          ipsum. Sed condimentum, sapien sed blandit cursus, justo metus
-          suscipit felis, sed lobortis libero eros nec urna.
-        </Text>
-
-        <Text style={styles.paragraph}>
-          Aliquam erat volutpat. Curabitur nec felis dignissim, lacinia lorem
-          vel, commodo libero. Sed at nisl in sapien commodo tincidunt vel a
-          arcu. Vivamus non nunc sed lorem consequat gravida.
-        </Text>
+        {loading ? (
+          <ActivityIndicator size="large" color="#007bff" />
+        ) : (
+          <RenderHTML
+            contentWidth={width}
+            source={{html: htmlContent}}
+            tagsStyles={{
+              h2: {fontSize: 20, fontWeight: '700', marginBottom: 10},
+              h3: {fontSize: 18, fontWeight: '600', marginBottom: 8},
+              p: {
+                fontSize: 15,
+                lineHeight: 22,
+                color: '#444',
+                marginBottom: 10,
+              },
+              li: {marginBottom: 6, color: '#333', fontSize: 15},
+              strong: {fontWeight: 'bold'},
+            }}
+          />
+        )}
       </ScrollView>
     </View>
   );
@@ -54,19 +80,5 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     padding: 20,
-  },
-  heading: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 15,
-    color: '#333',
-    textAlign: 'center',
-  },
-  paragraph: {
-    fontSize: 16,
-    color: '#555',
-    lineHeight: 22,
-    marginBottom: 15,
-    textAlign: 'justify',
   },
 });
